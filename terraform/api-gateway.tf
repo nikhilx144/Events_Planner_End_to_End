@@ -1,13 +1,19 @@
 ########################################
 # API Gateway - Main REST API
 ########################################
+
 resource "aws_api_gateway_rest_api" "auth_api" {
   name = "auth-api"
 
   endpoint_configuration {
     types = ["REGIONAL"]
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
+
 
 ########################################
 # API Resources
@@ -42,12 +48,17 @@ resource "aws_api_gateway_method" "signup_method" {
   resource_id = aws_api_gateway_resource.signup_resource.id
   http_method = "POST"
   authorization = "NONE"
+
+  depends_on = [
+    aws_api_gateway_resource.signup_resource
+  ]
 }
+
 
 resource "aws_api_gateway_integration" "signup_integration" {
   rest_api_id = aws_api_gateway_rest_api.auth_api.id
   resource_id = aws_api_gateway_resource.signup_resource.id
-  http_method = aws_api_gateway_method.signup_method.http_method
+  http_method = "POST"   # FIXED
   type        = "AWS_PROXY"
 
   uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.signup_lambda.arn}/invocations"
@@ -58,6 +69,8 @@ resource "aws_api_gateway_integration" "signup_integration" {
   ]
 }
 
+
+
 ########################################
 # LOGIN POST Method + Integration
 ########################################
@@ -66,12 +79,17 @@ resource "aws_api_gateway_method" "login_method" {
   resource_id = aws_api_gateway_resource.login_resource.id
   http_method = "POST"
   authorization = "NONE"
+
+  depends_on = [
+    aws_api_gateway_resource.login_resource
+  ]
 }
+
 
 resource "aws_api_gateway_integration" "login_integration" {
   rest_api_id = aws_api_gateway_rest_api.auth_api.id
   resource_id = aws_api_gateway_resource.login_resource.id
-  http_method = aws_api_gateway_method.login_method.http_method
+  http_method = "POST"   # FIXED
   type        = "AWS_PROXY"
 
   uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.login_lambda.arn}/invocations"
@@ -81,6 +99,8 @@ resource "aws_api_gateway_integration" "login_integration" {
     aws_lambda_function.login_lambda
   ]
 }
+
+
 
 ########################################
 # CORS for POST /auth/signup (OPTIONS)
