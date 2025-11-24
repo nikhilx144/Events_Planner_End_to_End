@@ -1,0 +1,62 @@
+# ===== Terraform =====
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# Ignore local AWS credentials
+.aws/
+credentials
+config
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+*.egg-info/
+build/
+dist/
+
+# Lambda zipped packages
+auth-service/*.zip
+notify-service/*.zip
+event-service/*.zip
+
+# ===== Kubernetes / Minikube =====
+.kube/
+.kubeconfig
+minikube/
+*.crt
+*.key
+
+# ===== VS Code =====
+.vscode/
+
+# ===== Logs =====
+*.log
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+
+# ===== Node / Frontend (in case later you add JS tooling) =====
+node_modules/
+npm-debug.log
+dist/
+build/
+
+# Sensitive files
+*.pem
+*.key
+
+# ===== Jenkins (if any local config) =====
+jenkins_home/
