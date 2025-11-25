@@ -15,6 +15,8 @@ credentials
 config
 
 # ===== Python =====
+python/
+package/
 __pycache__/
 *.pyc
 *.pyo
