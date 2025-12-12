@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
   }
 
   required_version = ">= 1.3.0"
@@ -11,4 +15,8 @@ terraform {
 
 provider "aws" {
   region = var.region
+}
+
+provider "random" {
+  # Random provider for generating unique bucket names
 }

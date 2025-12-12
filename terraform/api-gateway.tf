@@ -58,9 +58,9 @@ resource "aws_api_gateway_method" "signup_method" {
 resource "aws_api_gateway_integration" "signup_integration" {
   rest_api_id             = aws_api_gateway_rest_api.auth_api.id
   resource_id             = aws_api_gateway_resource.signup_resource.id
-  http_method             = "POST"  # FIXED: Use literal string instead of reference
+  http_method             = "POST" # FIXED: Use literal string instead of reference
   type                    = "AWS_PROXY"
-  integration_http_method = "POST"  # ADDED: Lambda always uses POST
+  integration_http_method = "POST" # ADDED: Lambda always uses POST
   uri                     = aws_lambda_function.signup_lambda.invoke_arn
 
   depends_on = [
@@ -85,9 +85,9 @@ resource "aws_api_gateway_method" "login_method" {
 resource "aws_api_gateway_integration" "login_integration" {
   rest_api_id             = aws_api_gateway_rest_api.auth_api.id
   resource_id             = aws_api_gateway_resource.login_resource.id
-  http_method             = "POST"  # FIXED: Use literal string instead of reference
+  http_method             = "POST" # FIXED: Use literal string instead of reference
   type                    = "AWS_PROXY"
-  integration_http_method = "POST"  # ADDED: Lambda always uses POST
+  integration_http_method = "POST" # ADDED: Lambda always uses POST
   uri                     = aws_lambda_function.login_lambda.invoke_arn
 
   depends_on = [
@@ -112,7 +112,7 @@ resource "aws_api_gateway_method" "signup_options" {
 resource "aws_api_gateway_integration" "signup_options_integration" {
   rest_api_id = aws_api_gateway_rest_api.auth_api.id
   resource_id = aws_api_gateway_resource.signup_resource.id
-  http_method = "OPTIONS"  # FIXED: Use literal string
+  http_method = "OPTIONS" # FIXED: Use literal string
   type        = "MOCK"
 
   request_templates = {
@@ -127,7 +127,7 @@ resource "aws_api_gateway_integration" "signup_options_integration" {
 resource "aws_api_gateway_method_response" "signup_options_response" {
   rest_api_id = aws_api_gateway_rest_api.auth_api.id
   resource_id = aws_api_gateway_resource.signup_resource.id
-  http_method = "OPTIONS"  # FIXED: Use literal string
+  http_method = "OPTIONS" # FIXED: Use literal string
   status_code = "200"
 
   response_parameters = {
@@ -144,7 +144,7 @@ resource "aws_api_gateway_method_response" "signup_options_response" {
 resource "aws_api_gateway_integration_response" "signup_options_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.auth_api.id
   resource_id = aws_api_gateway_resource.signup_resource.id
-  http_method = "OPTIONS"  # FIXED: Use literal string
+  http_method = "OPTIONS" # FIXED: Use literal string
   status_code = "200"
 
   response_parameters = {
@@ -233,7 +233,12 @@ resource "aws_api_gateway_deployment" "auth_deployment" {
     aws_api_gateway_integration.signup_integration,
     aws_api_gateway_integration.login_integration,
     aws_api_gateway_integration_response.signup_options_integration_response,
-    aws_api_gateway_integration_response.login_options_integration_response
+    aws_api_gateway_integration_response.login_options_integration_response,
+    aws_api_gateway_integration.events_integration_post,
+    aws_api_gateway_integration.events_integration_get,
+    aws_api_gateway_integration.events_integration_put,
+    aws_api_gateway_integration.events_integration_delete
+
   ]
 
   # Force new deployment on any change
@@ -246,6 +251,11 @@ resource "aws_api_gateway_deployment" "auth_deployment" {
       aws_api_gateway_method.login_method.id,
       aws_api_gateway_integration.signup_integration.id,
       aws_api_gateway_integration.login_integration.id,
+      aws_api_gateway_resource.events_resource.id,
+      aws_api_gateway_method.events_post.id,
+      aws_api_gateway_method.events_get.id,
+      aws_api_gateway_method.events_put.id,
+      aws_api_gateway_method.events_delete.id,
     ]))
   }
 

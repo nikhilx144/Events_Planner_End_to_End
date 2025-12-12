@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Event Planner</title>
     <link rel="stylesheet" href="css/style.css">
+
     <script>
-        if (!localStorage.getItem("token")) {
+        if (!localStorage.getItem("auth_token")) {
             alert("Please login first!");
             window.location.href = "login.html";
         }
     </script>
-
 </head>
+
 <body>
 
 <div class="dashboard-container">
+
     <!-- Navigation Bar -->
     <div class="navbar">
         <h2>📅 Event Planner</h2>
@@ -26,13 +28,12 @@
         </div>
     </div>
 
-    <!-- View Events Section -->
+    <!-- View Events -->
     <div id="eventsSection">
         <h3 style="color: #333; margin-bottom: 20px;">Upcoming Events</h3>
-        
-        <!-- Events will be displayed here -->
+
         <div class="events-grid" id="eventsGrid">
-            <!-- Empty state (will be hidden when events exist) -->
+            <!-- Empty State -->
             <div class="empty-state" id="emptyState">
                 <div class="empty-state-icon">📭</div>
                 <p>No events yet. Click "Add Event" to create your first event!</p>
@@ -40,49 +41,36 @@
         </div>
     </div>
 
-    <!-- Add/Edit Event Section (Hidden by default) -->
+    <!-- Add Event -->
     <div id="addEventSection" style="display: none;">
         <h3 style="color: #333; margin-bottom: 20px;">Create New Event</h3>
-        
+
         <form id="eventForm" class="form-section">
-            <input 
-                type="date" 
-                id="eventDate" 
-                required
-                style="cursor: pointer;">
-            
-            <input 
-                type="text" 
-                id="eventTitle" 
-                placeholder="Event Title *" 
-                required
-                maxlength="100">
-            
-            <input 
-                type="time" 
-                id="eventTime" 
-                placeholder="Event Time (Optional)">
-            
-            <input 
-                type="text" 
-                id="eventVenue" 
-                placeholder="Event Venue (Optional)"
-                maxlength="200">
-            
-            <textarea 
-                id="eventDetails" 
-                placeholder="Event Details *" 
-                required
-                rows="4"
-                maxlength="500"></textarea>
-            
+            <input type="date" id="eventDate" required>
+
+            <input type="text" id="eventTitle" 
+                placeholder="Event Title *" required maxlength="100">
+
+            <input type="time" id="eventTime">
+
+            <input type="text" id="eventVenue" 
+                placeholder="Event Venue (Optional)" maxlength="200">
+
+            <textarea id="eventDetails" placeholder="Event Details *" 
+                required rows="4" maxlength="500"></textarea>
+
             <button type="submit" id="saveEventBtn">💾 Save Event</button>
             <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
         </form>
     </div>
+
 </div>
 
-<script src="js/events.js"></script>
+<!-- Load config first -->
+<script src="js/config.js" defer></script>
+
+<!-- Events logic -->
+<script src="js/events.js" defer></script>
 
 </body>
 </html>

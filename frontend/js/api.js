@@ -1,4 +1,6 @@
-let API_BASE = "";
+// let API_BASE = "";
+let API_BASE = "https://bcs2hv1dp4.execute-api.ap-south-1.amazonaws.com/prod/auth/";
+
 
 async function loadConfig() {
     const res = await fetch("config.json");

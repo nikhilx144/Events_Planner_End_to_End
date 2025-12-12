@@ -5,10 +5,10 @@
 resource "aws_lambda_function" "signup_lambda" {
   function_name = "auth-signup"
 
-  filename         = "../auth-service/signup.zip"
-  handler          = "signup.lambda_handler"
-  runtime          = "python3.9"
-  role             = aws_iam_role.lambda_role.arn
+  filename = "../auth-service/signup.zip"
+  handler  = "signup.lambda_handler"
+  runtime  = "python3.9"
+  role     = aws_iam_role.lambda_role.arn
 
   memory_size = 256
   timeout     = 10
@@ -32,10 +32,10 @@ resource "aws_lambda_function" "signup_lambda" {
 resource "aws_lambda_function" "login_lambda" {
   function_name = "auth-login"
 
-  filename         = "../auth-service/login.zip"
-  handler          = "login.lambda_handler"
-  runtime          = "python3.9"
-  role             = aws_iam_role.lambda_role.arn
+  filename = "../auth-service/login.zip"
+  handler  = "login.lambda_handler"
+  runtime  = "python3.9"
+  role     = aws_iam_role.lambda_role.arn
 
   memory_size = 256
   timeout     = 10

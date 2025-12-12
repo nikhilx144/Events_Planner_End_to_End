@@ -5,24 +5,32 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <a href="index.html" class="home-icon">
+
+<a href="index.html" class="home-icon">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
         <path d="M10 20V14H14V20H19V11L12 5L5 11V20H10Z"/>
     </svg>
 </a>
 
+<div class="form-container">
+    <h2>Login to Your Account</h2>
+    
+    <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email Address" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
 
-    <div class="form-container">
-        <h2>Login to Your Account</h2>
-        <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email Address" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p class="switch-page">
-            New user? <a href="signup.html">Create an account</a>
-        </p>
-    </div>
-<script type="module" src="js/auth.js"></script>
+    <p class="switch-page">
+        New user? <a href="signup.html">Create an account</a>
+    </p>
+</div>
+
+<!-- Load config first -->
+<script src="js/config.js" defer></script>
+
+<!-- Auth logic -->
+<script type="module" src="js/auth.js" defer></script>
+
 </body>
 </html>
