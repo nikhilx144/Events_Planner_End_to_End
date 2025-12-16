@@ -1,3 +1,5 @@
+// frontend/js/events.js
+
 let EVENTS_API_BASE = null;
 let currentEditingEvent = null; // Track which event is being edited
 
@@ -40,15 +42,8 @@ function getAuthHeader() {
 // ---------------------------
 // Generic API call to /events
 // ---------------------------
-async function apiRequestEvents(method, body = null, eventId = null) {
+async function apiRequestEvents(method, body = null) {
     await loadEventsConfig();
-
-    let url = EVENTS_API_BASE;
-    
-    // For DELETE, add eventId as query parameter
-    if (method === 'DELETE' && eventId) {
-        url += `?eventId=${eventId}`;
-    }
 
     const opts = {
         method,
@@ -62,7 +57,7 @@ async function apiRequestEvents(method, body = null, eventId = null) {
         opts.body = JSON.stringify(body);
     }
 
-    const res = await fetch(url, opts);
+    const res = await fetch(EVENTS_API_BASE, opts);
     const text = await res.text();
 
     if (!res.ok) {
@@ -83,18 +78,30 @@ async function apiRequestEvents(method, body = null, eventId = null) {
 
 function renderEvents(items) {
     const grid = document.getElementById("eventsGrid");
+    
+    if (!grid) {
+        console.error("eventsGrid element not found!");
+        return;
+    }
+    
     const emptyState = document.getElementById("emptyState");
 
     // Clear previous
     grid.innerHTML = "";
 
     if (!items || items.length === 0) {
-        emptyState.style.display = "block";
-        grid.appendChild(emptyState);
+        if (emptyState) {
+            emptyState.style.display = "block";
+            grid.appendChild(emptyState);
+        } else {
+            grid.innerHTML = '<div class="empty-state"><p>No events yet. Click "Add Event" to create your first event!</p></div>';
+        }
         return;
     }
 
-    emptyState.style.display = "none";
+    if (emptyState) {
+        emptyState.style.display = "none";
+    }
 
     // Sort events by date (most recent first)
     items.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -123,7 +130,7 @@ function renderEvents(items) {
                 <button class="btn-small btn-edit" onclick="editEvent('${ev.eventId}')">
                     ✏️ Edit
                 </button>
-                <button class="btn-small btn-delete" onclick="deleteEvent('${ev.eventId}', '${ev.title}')">
+                <button class="btn-small btn-delete" onclick="deleteEvent('${ev.eventId}', '${ev.title.replace(/'/g, "\\'")}')">
                     🗑️ Delete
                 </button>
             </div>
@@ -204,7 +211,8 @@ async function deleteEvent(eventId, eventTitle) {
     try {
         showAlert("Deleting event...", "info");
         
-        await apiRequestEvents("DELETE", null, eventId);
+        // Send eventId in request body
+        await apiRequestEvents("DELETE", { eventId: eventId });
         
         showAlert("Event deleted successfully! 🗑️", "success");
         
@@ -268,16 +276,21 @@ document.addEventListener("DOMContentLoaded", () => {
     viewEventsBtn?.addEventListener("click", () => {
         // Reset editing state
         currentEditingEvent = null;
-        eventForm.reset();
+        
+        if (eventForm) {
+            eventForm.reset();
+        }
         
         // Reset button text
         const submitBtn = document.getElementById("saveEventBtn");
-        submitBtn.textContent = "💾 Save Event";
-        submitBtn.classList.remove("btn-update");
+        if (submitBtn) {
+            submitBtn.textContent = "💾 Save Event";
+            submitBtn.classList.remove("btn-update");
+        }
         
         // Show events list
-        eventsSection.style.display = "block";
-        addEventSection.style.display = "none";
+        if (eventsSection) eventsSection.style.display = "block";
+        if (addEventSection) addEventSection.style.display = "none";
         viewEventsBtn.classList.add("active");
         addEventBtn.classList.remove("active");
         
