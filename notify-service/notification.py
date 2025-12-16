@@ -39,9 +39,7 @@ def lambda_handler(event, context):
         while 'LastEvaluatedKey' in response:
             response = events_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
             all_events.extend(response.get('Items', []))
-        
         print(f"Total events in database: {len(all_events)}")
-        
         # Filter events for tomorrow
         tomorrow_events = [
             event for event in all_events 

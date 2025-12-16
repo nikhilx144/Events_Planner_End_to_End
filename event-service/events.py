@@ -1,4 +1,3 @@
-# event-service/events.py
 import os
 import json
 import uuid
